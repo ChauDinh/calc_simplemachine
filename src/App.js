@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { add, sub, div, mul } from './operators';
+import generate from './generate';
 import './App.css';
 
 const WIN = 'WIN';
@@ -12,6 +13,25 @@ class App extends Component {
     initResult: 3,
     currentResult: 3,
     operators: [add(4), sub(4), div(4)]
+  };
+
+  constructor(props) {
+    super(props);
+    const initState = {
+     ...generate(),
+     gameEnd: false,
+     gameResult: null
+    }
+  
+    this.initState = initState;
+  
+    // Create a copy of initState
+    this.state = { ...initState };
+  }
+  
+  doReset = e => {
+    e.preventDefault();
+    this.setState(this.initState);
   }
 
   doClickButton = op => e => {
@@ -56,7 +76,7 @@ class App extends Component {
               {op.label}
             </button>
           ))}
-          <button className="btn btn-secondary btn-clear">CLR</button>
+          <button className="btn btn-secondary btn-clear" onClick={this.doReset}>CLR</button>
           <button className="btn btn-secondary btn-help">
             <i className="help-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

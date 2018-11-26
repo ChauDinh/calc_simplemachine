@@ -10,4 +10,27 @@ export default function(options = {}) {
   ...options
  }
 
+ // Converting all operators into an array
+ const ops = Object.values(allOperators);
+
+ // Creating a random array of operators
+ const operators = Array.from({ length: opt.numberOfOperators }, () => {
+  const op = pickArrayRandom(ops);
+  return op(randomInt(...opt.operatorRange));
+ });
+
+ // Applying above operators to initResult
+ const goal = Array.from({ length: opt.numberOfMoves }).reduce(goal => {
+  const op = pickArrayRandom(operators);
+
+  return op.func(goal); 
+ }, opt.initResult);
+
+ return {
+  goal,
+  operators,
+  currentResult: opt.initResult,
+  initResult: opt.initResult,
+  moves: opt.numberOfMoves
+ }
 }
