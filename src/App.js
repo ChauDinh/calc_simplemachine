@@ -1,10 +1,34 @@
 import React, { Component } from 'react';
+import { add, sub, div, mul } from './operators';
 import './App.css';
+
+const WIN = 'WIN';
+const LOSE = 'LOSE';
 
 class App extends Component {
   state = {
-    goal: 12,
-    move: 3
+    goal: 4,
+    moves: 3,
+    initResult: 3,
+    currentResult: 3,
+    operators: [add(4), sub(4), div(4)]
+  }
+
+  doClickButton = op => e => {
+    e.preventDefault();
+    if (this.state.gameEnd) return 
+
+    this.setState(prevState => {
+      // Calculate the current result
+      const currentResult = op.func(prevState.currentResult);
+      // Reduce remaining moves
+      const moves = prevState.moves - 1;
+
+      const gameEnd = moves === 0;
+      const gameResult = currentResult === prevState.goal ? WIN : LOSE;
+
+      return { currentResult, moves, gameEnd, gameResult };
+    })
   }
 
   render() {
@@ -12,20 +36,26 @@ class App extends Component {
       <div className="App">
         <div className="show-archive">
           <div className="goal-archive">
-            <h1 className="goal-archive-text">19</h1>
+            <h1 className="goal-archive-text">4</h1>
             <p className="goal-archive-label">goal</p>
           </div>
           <div className="move-archive">
-            <h1 className="move-archive-text">5</h1>
+            <h1 className="move-archive-text">3</h1>
             <p className="move-archive-label">moves</p>
           </div>
         </div>
-        <div className="display">132</div>
+        <div className="display">3</div>
+        {this.state.gameEnd ? this.state.gameResult : null}
         <div className="buttons">
-          <button className="btn">+3</button>
-          <button className="btn">/3</button>
-          <button className="btn">+9</button>
-          <button className="btn">-9</button>
+          {this.state.operators.map(op => (
+            <button 
+              key={op.label}
+              className="btn"
+              onClick={this.doClickButton(op)}
+            >
+              {op.label}
+            </button>
+          ))}
           <button className="btn btn-secondary btn-clear">CLR</button>
           <button className="btn btn-secondary btn-help">
             <i className="help-icon">

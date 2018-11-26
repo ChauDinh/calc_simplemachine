@@ -97,9 +97,14 @@ body {
   grid-row: 2;
 }
 
+.btn-secondary {
+  background-color: #00b5ad;
+}
+
 .help-icon {
   max-width: 3rem;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
+
